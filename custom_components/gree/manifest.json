@@ -1,0 +1,19 @@
+{
+  "domain": "gree",
+  "name": "Gree Lan",
+  "version": "1.0.0",
+  "documentation": "https://github.com/jieen1/gree_lan",
+  "dependencies": [
+    "network"
+  ],
+  "codeowners": [
+    "@jieen1"
+  ],
+  "config_flow": true,
+  "requirements": [
+    "pycryptodome~=3.10"
+  ],
+  "loggers": [
+    "gree_lan"
+  ]
+}
