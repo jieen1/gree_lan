@@ -184,17 +184,17 @@ class Device:
         self.set_property(Props.FAN_SPEED, int(value))
 
     @property
-    def horizontal_swing(self) -> int:
-        return self.get_property(Props.SWING_HORIZ)
+    def rotate(self) -> int:
+        return self.get_property(Props.ROTATE)
 
-    @horizontal_swing.setter
-    def horizontal_swing(self, value: int):
-        self.set_property(Props.SWING_HORIZ, int(value))
+    @rotate.setter
+    def rotate(self, value: int):
+        self.set_property(Props.ROTATE, int(value))
 
     @property
-    def vertical_swing(self) -> int:
-        return self.get_property(Props.SWING_VERT)
+    def lr_angle(self) -> int:
+        return self.get_property(Props.LR_ANGLE)
 
-    @vertical_swing.setter
-    def vertical_swing(self, value: int):
-        self.set_property(Props.SWING_VERT, int(value))
+    @lr_angle.setter
+    def lr_angle(self, value: int):
+        self.set_property(Props.LR_ANGLE, int(value))

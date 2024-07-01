@@ -20,9 +20,23 @@ class Props(enum.Enum):
 
 
 @enum.unique
-class Mode(enum.IntEnum):
-    Auto = 0
+class FanMode(enum.IntEnum):
+    Normal = 0
     Sleep = 2
+
+
+@enum.unique
+class Rotate(enum.IntEnum):
+    Normal = 0
+    Rotate = 1
+
+
+@enum.unique
+class LRRotateAngle(enum.IntEnum):
+    Normal = 0
+    Rotate60 = 12
+    Rotate100 = 20
+    Rotate360 = 72
 
 
 @enum.unique
