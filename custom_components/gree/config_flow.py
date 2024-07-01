@@ -1,5 +1,5 @@
 """Config flow for Gree."""
-from lib.discovery import Discovery
+from .lib.discovery import Discovery
 from .constant import DISCOVERY_TIMEOUT, DOMAIN
 
 from homeassistant.components.network import async_get_ipv4_broadcast_addresses
