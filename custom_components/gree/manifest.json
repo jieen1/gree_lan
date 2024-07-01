@@ -15,5 +15,6 @@
   ],
   "loggers": [
     "gree_lan"
-  ]
+  ],
+  "iot_class": "local_polling"
 }

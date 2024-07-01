@@ -72,7 +72,6 @@ class GreeFanEntity(FanEntity, CoordinatorEntity[DeviceDataUpdateCoordinator]):
         await self.coordinator.push_state_update()
         self.async_write_ha_state()
         await self.async_set_percentage(percentage)
-        await self.async_set_preset_mode(preset_mode)
 
     async def async_turn_off(self) -> None:
         """Turn off the device."""
@@ -127,8 +126,3 @@ class GreeFanEntity(FanEntity, CoordinatorEntity[DeviceDataUpdateCoordinator]):
         self.coordinator.device.lr_angle = 12
         await self.coordinator.push_state_update()
         self.async_write_ha_state()
-
-
-
-
-
