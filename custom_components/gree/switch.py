@@ -6,7 +6,9 @@ from typing import Any
 from homeassistant.components.switch import SwitchDeviceClass, SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
+from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -43,7 +45,30 @@ class GreeTowerFanModeEntity(CoordinatorEntity[DeviceDataUpdateCoordinator], Swi
 
     def __init__(self, coordinator):
         """Initialize the Gree device."""
-        super().__init__(coordinator, "fan mode")
+        super().__init__(coordinator)
+        self._desc = "fan mode"
+        self._name = f"{coordinator.device.device_info.name}"
+        self._mac = coordinator.device.device_info.mac
+
+    @property
+    def name(self):
+        """Return the name of the node."""
+        return f"{self._name} {self._desc}"
+
+    @property
+    def unique_id(self):
+        """Return the unique id based for the node."""
+        return f"{self._mac}_{self._desc}"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return info about the device."""
+        return DeviceInfo(
+            connections={(CONNECTION_NETWORK_MAC, self._mac)},
+            identifiers={(DOMAIN, self._mac)},
+            manufacturer="Gree",
+            name=self._name,
+        )
 
     @property
     def device_class(self):
