@@ -46,7 +46,7 @@ class GreeTowerFanModeEntity(CoordinatorEntity[DeviceDataUpdateCoordinator], Swi
     def __init__(self, coordinator):
         """Initialize the Gree device."""
         super().__init__(coordinator)
-        self._desc = "fan mode"
+        self._desc = "Sleep Mode"
         self._name = f"{coordinator.device.device_info.name}"
         self._mac = coordinator.device.device_info.mac
 
