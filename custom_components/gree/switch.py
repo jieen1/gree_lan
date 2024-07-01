@@ -78,11 +78,11 @@ class GreeTowerFanModeEntity(CoordinatorEntity[DeviceDataUpdateCoordinator], Swi
     @property
     def is_on(self) -> bool:
         """Return if the light is turned on."""
-        return self.coordinator.device.mode == 1
+        return self.coordinator.device.mode == 2
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the entity on."""
-        self.coordinator.device.mode = 1
+        self.coordinator.device.mode = 2
         await self.coordinator.push_state_update()
         self.async_write_ha_state()
 
