@@ -5,7 +5,7 @@ DEVICE_MAP = {
     '828211': {
         "class": GreeDeviceInfo,
         "type_name": "FLZ-09X67Bg",
-        "support_features": [BaseFeature(), FanRotateWithAngleFeature(), FanRotateFeature()]
+        "support_features": [BaseFeature(), ModeFeature(), FanRotateWithAngleFeature()]
     },
     '828200': {
         "class": GreeDeviceInfo,
