@@ -75,5 +75,5 @@ class GreeDeviceInfo(GreeDevice, DeviceInfo):
             props_set = set()
             for feature in self.support_features():
                 for prop in feature.support_pros:
-                    props_set.add(prop)
+                    props_set.add(prop.value)
             self.d_pros = list(props_set)
