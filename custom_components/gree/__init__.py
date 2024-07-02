@@ -14,7 +14,7 @@ from .constant import DOMAIN, DATA_DISCOVERY_SERVICE, DISPATCHERS, DATA_DISCOVER
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS = [Platform.FAN, Platform.SWITCH]
+PLATFORMS = [Platform.FAN, Platform.SWITCH, Platform.SELECT]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

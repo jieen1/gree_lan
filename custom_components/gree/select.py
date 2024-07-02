@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
-
-from homeassistant.components.switch import SwitchDeviceClass, SwitchEntity
+from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
@@ -13,6 +11,16 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .bridge import DeviceDataUpdateCoordinator
 from .constant import COORDINATORS, DISPATCH_DEVICE_DISCOVERED, DISPATCHERS, DOMAIN
+from .lib.enums import LRRotateAngle
+
+LRAngleDescMap = {
+    LRRotateAngle.Normal: "已关闭",
+    LRRotateAngle.Rotate60: "60°",
+    LRRotateAngle.Rotate100: "100°",
+    LRRotateAngle.Rotate360: "360°",
+}
+
+LRAngleDescReserveMap = {desc: angle for (angle, desc) in LRAngleDescMap.items()}
 
 
 async def async_setup_entry(
@@ -20,14 +28,14 @@ async def async_setup_entry(
         config_entry: ConfigEntry,
         async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up the Gree fan mode from a config entry."""
+    """Set up the Gree fan rotate mode from a config entry."""
 
     @callback
     def init_device(coordinator):
         """Register the device."""
         async_add_entities(
             [
-                GreeTowerFanModeEntity(coordinator),
+                GreeTowerFanRotateAngleEntity(coordinator),
             ]
         )
 
@@ -39,13 +47,13 @@ async def async_setup_entry(
     )
 
 
-class GreeTowerFanModeEntity(CoordinatorEntity[DeviceDataUpdateCoordinator], SwitchEntity):
+class GreeTowerFanRotateAngleEntity(CoordinatorEntity[DeviceDataUpdateCoordinator], SelectEntity):
     """Representation of the front panel light on the device."""
 
     def __init__(self, coordinator):
         """Initialize the Gree device."""
         super().__init__(coordinator)
-        self._desc = "Sleep Mode"
+        self._desc = "Rotate Angle"
         self._name = f"{coordinator.device.device_info.name}"
         self._mac = coordinator.device.device_info.mac
 
@@ -70,23 +78,18 @@ class GreeTowerFanModeEntity(CoordinatorEntity[DeviceDataUpdateCoordinator], Swi
         )
 
     @property
-    def device_class(self):
-        """Return the class of this device, from component DEVICE_CLASSES."""
-        return SwitchDeviceClass.SWITCH
+    def options(self) -> list[str]:
+        return list(LRAngleDescMap.values())
 
     @property
-    def is_on(self) -> bool:
-        """Return if the light is turned on."""
-        return self.coordinator.device.mode == 2
+    def current_option(self) -> str | None:
+        return LRAngleDescMap.get(LRRotateAngle(self.coordinator.device.lr_angle))
 
-    async def async_turn_on(self, **kwargs: Any) -> None:
-        """Turn the entity on."""
-        self.coordinator.device.mode = 2
-        await self.coordinator.push_state_update()
-        self.async_write_ha_state()
-
-    async def async_turn_off(self, **kwargs: Any) -> None:
-        """Turn the entity off."""
-        self.coordinator.device.mode = 0
-        await self.coordinator.push_state_update()
-        self.async_write_ha_state()
+    async def async_select_option(self, option: str) -> None:
+        if option and LRAngleDescReserveMap.get(option):
+            value: int = LRAngleDescReserveMap.get(option).value
+            rotate_value = 1 if value != 0 else 0
+            self.coordinator.device.rotate = rotate_value
+            self.coordinator.device.lr_angle = value
+            await self.coordinator.push_state_update()
+            self.async_write_ha_state()
