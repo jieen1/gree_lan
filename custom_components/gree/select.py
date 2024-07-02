@@ -86,7 +86,7 @@ class GreeTowerFanRotateAngleEntity(CoordinatorEntity[DeviceDataUpdateCoordinato
         return LRAngleDescMap.get(LRRotateAngle(self.coordinator.device.lr_angle))
 
     async def async_select_option(self, option: str) -> None:
-        if option and LRAngleDescReserveMap.get(option):
+        if option is not None and LRAngleDescReserveMap.get(option) is not None:
             value: int = LRAngleDescReserveMap.get(option).value
             rotate_value = 1 if value != 0 else 0
             self.coordinator.device.rotate = rotate_value
