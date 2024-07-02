@@ -26,11 +26,13 @@ async def async_setup_entry(
     @callback
     def init_device(coordinator):
         """Register the device."""
-        async_add_entities(
-            [
-                GreeTowerFanModeEntity(coordinator),
-            ]
-        )
+        features = coordinator.device.device_info.support_features()
+        if any([f.mode() for f in features]):
+            async_add_entities(
+                [
+                    GreeTowerFanModeEntity(coordinator),
+                ]
+            )
 
     for coordinator in hass.data[DOMAIN][COORDINATORS]:
         init_device(coordinator)

@@ -33,11 +33,10 @@ async def async_setup_entry(
     @callback
     def init_device(coordinator):
         """Register the device."""
-        async_add_entities(
-            [
-                GreeTowerFanRotateAngleEntity(coordinator),
-            ]
-        )
+
+        features = coordinator.device.device_info.support_features()
+        if any([f.lr_angle() for f in features]):
+            async_add_entities([GreeTowerFanRotateAngleEntity(coordinator)])
 
     for coordinator in hass.data[DOMAIN][COORDINATORS]:
         init_device(coordinator)

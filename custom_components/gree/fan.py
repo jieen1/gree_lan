@@ -41,7 +41,7 @@ async def async_setup_entry(
 
 
 class GreeFanEntity(FanEntity, CoordinatorEntity[DeviceDataUpdateCoordinator]):
-    _attr_supported_features = FanEntityFeature.SET_SPEED | FanEntityFeature.OSCILLATE
+    _attr_supported_features = FanEntityFeature.SET_SPEED
 
     def __init__(self, coordinator: DeviceDataUpdateCoordinator, max_step=12) -> None:
         """Initialize the Gree device."""
@@ -50,6 +50,9 @@ class GreeFanEntity(FanEntity, CoordinatorEntity[DeviceDataUpdateCoordinator]):
         self._mac = coordinator.device.device_info.mac
         self._step_range: tuple[int, int] | None = (1, max_step) if max_step else None
         self._attr_speed_count = max_step
+        features = coordinator.device.device_info.support_features()
+        if any([f.rotate() for f in features]):
+            self._attr_supported_features = FanEntityFeature.SET_SPEED | FanEntityFeature.OSCILLATE
 
     @property
     def name(self) -> str:
