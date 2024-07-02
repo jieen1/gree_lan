@@ -30,10 +30,3 @@ class FanRotateFeature(Feature):
 
     def __init__(self) -> None:
         super().__init__(self.SUPPORT_PROPS)
-
-
-class TMRFeature(Feature):
-    SUPPORT_PROPS = [Props.TMR_ON, Props.TMR_ACTION, Props.TMR_HOUR, Props.TMR_MIN]
-
-    def __init__(self) -> None:
-        super().__init__(self.SUPPORT_PROPS)

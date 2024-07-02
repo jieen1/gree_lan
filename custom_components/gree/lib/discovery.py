@@ -9,7 +9,7 @@ from typing import Coroutine, List
 
 from custom_components.gree.lib.device_infos import DEVICE_MAP
 from custom_components.gree.lib.exceptions import DeviceNotBoundError
-from .gree_device import GreeDeviceInfo, GreeTowerFan
+from .gree_device import GreeDeviceInfo
 from .network import BroadcastListenerProtocol, IPAddr
 
 _LOGGER = logging.getLogger(__name__)

@@ -13,6 +13,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .bridge import DeviceDataUpdateCoordinator
 from .constant import COORDINATORS, DISPATCH_DEVICE_DISCOVERED, DISPATCHERS, DOMAIN
+from .lib.enums import FanMode
 
 
 async def async_setup_entry(
@@ -77,16 +78,16 @@ class GreeTowerFanModeEntity(CoordinatorEntity[DeviceDataUpdateCoordinator], Swi
     @property
     def is_on(self) -> bool:
         """Return if the light is turned on."""
-        return self.coordinator.device.mode == 2
+        return self.coordinator.device.mode == FanMode.Sleep.value
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the entity on."""
-        self.coordinator.device.mode = 2
+        self.coordinator.device.mode = FanMode.Sleep.value
         await self.coordinator.push_state_update()
         self.async_write_ha_state()
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the entity off."""
-        self.coordinator.device.mode = 0
+        self.coordinator.device.mode = FanMode.Normal.value
         await self.coordinator.push_state_update()
         self.async_write_ha_state()

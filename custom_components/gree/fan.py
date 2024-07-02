@@ -14,8 +14,8 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util.percentage import ranged_value_to_percentage, int_states_in_range, percentage_to_ranged_value
 
 from .bridge import DeviceDataUpdateCoordinator
-from .constant import DOMAIN, COORDINATORS, \
-    DISPATCHERS, DISPATCH_DEVICE_DISCOVERED
+from .constant import DOMAIN, COORDINATORS, DISPATCHERS, DISPATCH_DEVICE_DISCOVERED
+from .lib.enums import Rotate, LRRotateAngle
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -117,12 +117,12 @@ class GreeFanEntity(FanEntity, CoordinatorEntity[DeviceDataUpdateCoordinator]):
 
     @property
     def oscillating(self) -> bool | None:
-        return self.coordinator.device.rotate == 1
+        return self.coordinator.device.rotate == Rotate.Rotate.value
 
     async def async_oscillate(self, oscillating: bool) -> None:
         if oscillating is None:
             return
-        self.coordinator.device.rotate = 1 if oscillating else 0
-        self.coordinator.device.lr_angle = 12
+        self.coordinator.device.rotate = Rotate.Rotate.value if oscillating else Rotate.Normal.value
+        self.coordinator.device.lr_angle = LRRotateAngle.Rotate60.value
         await self.coordinator.push_state_update()
         self.async_write_ha_state()

@@ -1,6 +1,6 @@
 from typing import List, final
 
-from .features import Feature, BaseFeature, ModeFeature, FanRotateFeature, TMRFeature
+from .features import Feature
 
 
 class GreeDevice:
@@ -77,15 +77,3 @@ class GreeDeviceInfo(GreeDevice, DeviceInfo):
                 for prop in feature.support_pros:
                     props_set.add(prop)
             self.d_pros = list(props_set)
-
-
-class GreeTowerFan(GreeDeviceInfo):
-
-    def __init__(self, type_name, name, type_id, ip, port, mac, brand=None, model=None, version=None) -> None:
-        super().__init__(type_name, name, type_id, ip, port, mac, brand, model, version,
-                         [BaseFeature(), ModeFeature(), TMRFeature(), FanRotateFeature()])
-        props_set = set()
-        for feature in self.support_features():
-            for prop in feature.support_pros:
-                props_set.add(prop)
-        self.d_pros = list(props_set)

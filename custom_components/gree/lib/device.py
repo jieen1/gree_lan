@@ -15,22 +15,6 @@ UPDATE BY jieen1
 
 
 class Device:
-    """Class representing a physical device, it's state and properties.
-
-    Devices must be bound, either by discovering their presence, or supplying a persistent
-    device key which is then used for communication (and encryption) with the unit. See the
-    `bind` function for more details on how to do this.
-
-    Once a device is bound occasionally call `update_state` to request and update state from
-    the HVAC, as it is possible that it changes state from other sources.
-
-    Attributes:
-        power: A boolean indicating if the unit is on or off
-        mode: An int indicating operating mode, see `Mode` enum for possible values
-        fan_speed: An int indicating fan speed, see `FanSpeed` enum for possible values
-        horizontal_swing: An int to control the horizontal blade position, see `HorizontalSwing` enum for possible values
-        vertical_swing: An int to control the vertical blade position, see `VerticalSwing` enum for possible values
-    """
 
     def __init__(self, device_info: GreeDeviceInfo):
         self._logger = logging.getLogger(__name__)
@@ -85,9 +69,7 @@ class Device:
 
     async def request_version(self) -> None:
         """Request the firmware version from the device."""
-        ret = await network.request_state(
-            ["hid"] + ['TmrOn', 'TmrAction', 'Rotate', 'LRAngle', 'LRAngle', 'TmrHour', 'TmrMin', 'estate', 'JFerr'],
-            self.device_info, self.device_key)
+        ret = await network.request_state(["hid"], self.device_info, self.device_key)
         self.hid = ret.get("hid")
 
         # Ex: hid = 362001000762+U-CS532AE(LT)V3.31.bin
@@ -102,7 +84,7 @@ class Device:
 
         self._logger.debug("Updating device properties for (%s)", str(self.device_info))
 
-        props = [x.value for x in Props]
+        props = self.device_info.d_pros
 
         try:
             self._properties = await network.request_state(
